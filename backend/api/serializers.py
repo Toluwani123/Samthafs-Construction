@@ -61,6 +61,30 @@ class ProjectSerializer(serializers.ModelSerializer):
             Challenge.objects.create(project=project, **challenge_data)
         
         return project
+    def update(self, instance, validated_data):
+        # Handle simple fields
+        for attr, value in validated_data.items():
+            if attr not in ('phases', 'gallery', 'challenges'):
+                setattr(instance, attr, value)
+        instance.save()
+
+        # Replace nested relationships if provided
+        if 'phases' in validated_data:
+            instance.phases.all().delete()
+            for pd in validated_data['phases']:
+                Phase.objects.create(project=instance, **pd)
+
+        if 'gallery' in validated_data:
+            instance.gallery.all().delete()
+            for gd in validated_data['gallery']:
+                ProjectGallery.objects.create(project=instance, **gd)
+
+        if 'challenges' in validated_data:
+            instance.challenges.all().delete()
+            for cd in validated_data['challenges']:
+                Challenge.objects.create(project=instance, **cd)
+
+        return instance
     
 
 
