@@ -9,6 +9,7 @@ import StatCard from '../components/StatCard';
 import ContactModal from '../components/ContactModal';
 import QuoteModal from '../components/QuoteModal';
 import ScrollToTop from '../components/ScrollToTop';
+import { services } from '../constants';
 
 
 function Home() {
@@ -75,38 +76,7 @@ function Home() {
         }
         } catch (err) { console.error('Error sending contact message:', err); }
     };
-    const services = [
-        {
-            Icon: FaBuilding,
-            title: 'Commercial Construction',
-            desc:
-            'From office buildings to retail spaces, we deliver commercial projects that combine functionality with architectural excellence.',
-        },
-        {
-            Icon: FaHome,
-            title: 'Residential Development',
-            desc:
-            'Creating beautiful, sustainable homes and residential complexes that enhance quality of life and community values.',
-        },
-        {
-            Icon: FaIndustry,
-            title: 'Industrial Construction',
-            desc:
-            'Specialized construction for manufacturing, logistics, and industrial facilities with a focus on efficiency and durability.',
-        },
-        {
-            Icon: FaPaintRoller,
-            title: 'Interior Works',
-            desc:
-            'From drywall and millwork to bespoke finishes and MEP fit-outs, we customize every interior space for style, comfort, and code compliance.',
-        },
-        {
-            Icon: FaTree,
-            title: 'Exterior Construction',
-            desc:
-            'Façade restoration, roofing, cladding, hardscapes, and landscaping—ensuring curb appeal, weather-resistance, and long-term performance.',
-        },
-    ];
+    
     const stats = [
         { Icon: FaCheckCircle, value: '250+', label: 'Projects Completed' },
         { Icon: FaCalendarAlt,  value: '20+',   label: 'Years of Experience' },
@@ -254,7 +224,7 @@ function Home() {
                     </div>
                 </div>
             </section>
-            <section id="services" className="py-20 bg-white">
+            <section className="py-20 bg-white">
                 <div className="container mx-auto px-6">
                     <div className="text-center mb-16">
                     <h2 className="text-4xl font-bold mb-4">Our Expertise</h2>

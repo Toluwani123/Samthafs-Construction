@@ -44,3 +44,11 @@ class TeamMemberRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = TeamMemberSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
     lookup_field = 'id'
+
+class TestimonialListView(generics.ListAPIView):
+    serializer_class = TestimonialSerializer
+    permission_classes = [AllowAny]
+    
+    def get_queryset(self):
+        return Project.objects.exclude(client_testimonial='') \
+                             .order_by('-completion_date')[:4]

@@ -1,6 +1,13 @@
 import React from 'react';
+import { FaFacebook, FaTwitter, FaLinkedinIn, FaInstagram } from 'react-icons/fa';
 
 function Footer({ setActivePage, setIsContactModalOpen }) {
+  const socialIcons = [
+    { Icon: FaFacebook, href: 'https://facebook.com/yourpage' },
+    { Icon: FaTwitter, href: 'https://twitter.com/yourpage' },
+    { Icon: FaLinkedinIn, href: 'https://linkedin.com/in/yourprofile' },
+    { Icon: FaInstagram, href: 'https://instagram.com/yourpage' },
+  ]
   return (
     <footer className="bg-gray-900 text-white pt-16 pb-8">
       <div className="container mx-auto px-6">
@@ -12,9 +19,15 @@ function Footer({ setActivePage, setIsContactModalOpen }) {
               Excellence in construction with precision, innovation, and integrity since 2005.
             </p>
             <div className="flex space-x-4">
-              {['facebook-f', 'twitter', 'linkedin-in', 'instagram'].map(icon => (
-                <a key={icon} href="#" className="text-gray-400 hover:text-white transition-colors">
-                  <i className={`fab fa-${icon} text-lg`} />
+              {socialIcons.map(({ Icon, href }, idx) => (
+                <a
+                  key={idx}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
+                  <Icon className="text-lg" />
                 </a>
               ))}
             </div>

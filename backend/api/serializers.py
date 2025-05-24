@@ -86,7 +86,10 @@ class ProjectSerializer(serializers.ModelSerializer):
 
         return instance
     
-
+class TestimonialSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Project
+        fields = ('client_name', 'client_testimonial', 'completion_date')
 
 class TeamMemberSerializer(serializers.ModelSerializer):
     class Meta:
