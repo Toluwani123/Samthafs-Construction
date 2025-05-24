@@ -1,6 +1,7 @@
 // src/components/MenuBar.jsx
 import React, { useState, useEffect } from 'react';
 import { FaBars, FaTimes } from 'react-icons/fa';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 export default function MenuBar({
   isScrolled,
@@ -10,6 +11,8 @@ export default function MenuBar({
   setIsContactModalOpen,
 }) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   // close mobile menu if you scroll or switch pages
   useEffect(() => {
@@ -21,6 +24,19 @@ export default function MenuBar({
   }, [mobileOpen]);
 
   const links = ['home', 'projects', 'services', 'about'];
+
+  const handleSectionClick = (e, section) => {
+    e.preventDefault();
+    setActivePage(section);
+    if (location.pathname !== '/') {
+      navigate('/');
+      setTimeout(() => {
+        document.getElementById(section)?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    } else {
+      document.getElementById(section)?.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
     <header
@@ -35,19 +51,36 @@ export default function MenuBar({
 
         {/* desktop nav */}
         <nav className="hidden md:flex items-center space-x-6">
-          {links.map(link => (
-            <a
-              key={link}
-              href={`#${link}`}
-              onClick={() => setActivePage(link)}
-              className={`
-                font-medium transition-colors hover:text-blue-500 cursor-pointer
-                ${activePage === link ? 'text-blue-500' : ''}
-              `}
-            >
-              {link[0].toUpperCase() + link.slice(1)}
-            </a>
-          ))}
+          {links.map(link => {
+            const label = link[0].toUpperCase() + link.slice(1);
+            if (link === 'home' || link === 'projects') {
+              return (
+                <a
+                  key={link}
+                  href={`#${link}`}
+                  onClick={e => handleSectionClick(e, link)}
+                  className={`font-medium transition-colors hover:text-blue-500 cursor-pointer ${
+                    activePage === link ? 'text-blue-500' : ''
+                  }`}
+                >
+                  {label}
+                </a>
+              );
+            }
+
+            return (
+              <Link
+                key={link}
+                to={`/${link}`}
+                onClick={() => setActivePage(link)}
+                className={`font-medium transition-colors hover:text-blue-500 ${
+                  activePage === link ? 'text-blue-500' : ''
+                }`}
+              >
+                {label}
+              </Link>
+            );
+          })}
 
           <a
             href="#contact"
@@ -59,10 +92,9 @@ export default function MenuBar({
 
           <button
             onClick={() => setIsQuoteModalOpen(true)}
-            className={`
-              rounded-button whitespace-nowrap px-6 py-2 font-medium transition-colors
-              ${isScrolled ? 'bg-blue-600 text-white' : 'bg-white text-blue-600'}
-            `}
+            className={`rounded-button whitespace-nowrap px-6 py-2 font-medium transition-colors ${
+              isScrolled ? 'bg-blue-600 text-white' : 'bg-white text-blue-600'
+            }`}
           >
             Get a Quote
           </button>
@@ -82,21 +114,42 @@ export default function MenuBar({
       {mobileOpen && (
         <nav className="md:hidden bg-white text-gray-800 shadow-md">
           <div className="flex flex-col items-center space-y-4 py-6">
-            {links.map(link => (
-              <a
-                key={link}
-                href={`#${link}`}
-                onClick={() => {
-                  setActivePage(link);
-                  setMobileOpen(false);
-                }}
-                className={`text-lg font-medium transition-colors hover:text-blue-500 ${
-                  activePage === link ? 'text-blue-500' : ''
-                }`}
-              >
-                {link[0].toUpperCase() + link.slice(1)}
-              </a>
-            ))}
+            {links.map(link => {
+              const label = link[0].toUpperCase() + link.slice(1);
+              if (link === 'home' || link === 'projects') {
+                return (
+                  <a
+                    key={link}
+                    href={`#${link}`}
+                    onClick={e => {
+                      handleSectionClick(e, link);
+                      setMobileOpen(false);
+                    }}
+                    className={`text-lg font-medium transition-colors hover:text-blue-500 ${
+                      activePage === link ? 'text-blue-500' : ''
+                    }`}
+                  >
+                    {label}
+                  </a>
+                );
+              }
+
+              return (
+                <Link
+                  key={link}
+                  to={`/${link}`}
+                  onClick={() => {
+                    setActivePage(link);
+                    setMobileOpen(false);
+                  }}
+                  className={`text-lg font-medium transition-colors hover:text-blue-500 ${
+                    activePage === link ? 'text-blue-500' : ''
+                  }`}
+                >
+                  {label}
+                </Link>
+              );
+            })}
 
             <button
               onClick={() => {

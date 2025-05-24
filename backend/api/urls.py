@@ -7,5 +7,6 @@ urlpatterns = [
     path("projects/<int:id>/", ProjectEditView.as_view(), name="project_edit"),
     path("team/", TeamMemberView.as_view(), name="team"),
     path("team/<int:id>/", TeamMemberRetrieveUpdateDestroy.as_view(), name="team_member_edit"),
+    path('testimonials/', TestimonialListView.as_view(), name='testimonial-list'),
     
 ]
