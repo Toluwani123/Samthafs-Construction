@@ -280,7 +280,6 @@ function Services() {
             onChange={handleContactChange}
             onSubmit={handleContactSubmit}
             isMessageSent={messageSent}
-        /* pass form props if any */
         />
         <QuoteModal
             isOpen={quoteModalOpen}
@@ -289,7 +288,7 @@ function Services() {
             onChange={handleQuoteChange}   
             onSubmit={handleQuoteSubmit}   
             isQuoteSent={quoteSent}  
-        /* pass form props if any */
+        
         />
 
         <ScrollToTop />
