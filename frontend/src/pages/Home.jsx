@@ -10,6 +10,7 @@ import ContactModal from '../components/ContactModal';
 import QuoteModal from '../components/QuoteModal';
 import ScrollToTop from '../components/ScrollToTop';
 import { services } from '../constants';
+import { Link } from 'react-router-dom';
 
 
 function Home() {
@@ -207,9 +208,9 @@ function Home() {
                                         <span><FaMapMarkerAlt className='mr-2' />{project.location}</span>
                                         <span><FaClock/>{duration(project.start_date, project.completion_date)}</span>
                                     </div>
-                                    <a href="#" className="!rounded-button whitespace-nowrap mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm font-medium transition-colors inline-block cursor-pointer">
+                                    <Link to={`/projects/${project.id}`} className="!rounded-button whitespace-nowrap mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm font-medium transition-colors inline-block cursor-pointer">
                                         View Project
-                                    </a>
+                                    </Link>
                                 </div>
                                 <div className="p-6">
                                     <h3 className="text-xl font-bold mb-2">{project.title}</h3>
@@ -287,7 +288,7 @@ function Home() {
                     </p>
                     <button
                         id="contact-us-button"
-                        onClick={() => setIsContactModalOpen(true)}
+                        onClick={() => setContactModal(true)}
                         className="
                         inline-block
                         bg-white text-blue-600 hover:bg-blue-50

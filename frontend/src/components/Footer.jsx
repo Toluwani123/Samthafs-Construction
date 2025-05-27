@@ -1,13 +1,35 @@
 import React from 'react';
 import { FaFacebook, FaTwitter, FaLinkedinIn, FaInstagram } from 'react-icons/fa';
+import {Link, useNavigate, useLocation} from 'react-router-dom';
 
 function Footer({ setActivePage, setIsContactModalOpen }) {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const links = ['home','projects','services','about'];
   const socialIcons = [
     { Icon: FaFacebook, href: 'https://facebook.com/yourpage' },
     { Icon: FaTwitter, href: 'https://twitter.com/yourpage' },
     { Icon: FaLinkedinIn, href: 'https://linkedin.com/in/yourprofile' },
     { Icon: FaInstagram, href: 'https://instagram.com/yourpage' },
   ]
+
+  const handleNav = (e,link) => {
+    e.preventDefault();
+    setActivePage(link);
+    if (link === 'home' || link === 'projects') {
+      if (location.pathname !== '/') {
+        navigate('/');
+        setTimeout(() => {
+          document.getElementById(link)?.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+
+      } else {
+        document.getElementById(link)?.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      navigate(`/${link}`);
+    }
+  }
   return (
     <footer className="bg-gray-900 text-white pt-16 pb-8">
       <div className="container mx-auto px-6">
@@ -37,27 +59,33 @@ function Footer({ setActivePage, setIsContactModalOpen }) {
           <div>
             <h4 className="text-lg font-bold mb-6">Quick Links</h4>
             <ul className="space-y-3">
-              {['home', 'projects', 'services', 'about'].map(link => (
+              {links.map(link => (
                 <li key={link}>
                   <a
-                    href={`#${link}`}
-                    onClick={() => setActivePage(link)}
+                    href={ link==='services'||link==='about' ? `/${link}` : `#${link}` }
+                    onClick={e => handleNav(e, link)}
                     className="text-gray-400 hover:text-white transition-colors"
                   >
-                    {link.charAt(0).toUpperCase() + link.slice(1)}
+                    {link[0].toUpperCase() + link.slice(1)}
+
                   </a>
                 </li>
+
               ))}
               <li>
                 <a
                   href="#contact"
-                  onClick={() => setIsContactModalOpen(true)}
-                  className="text-gray-400 hover:text-white transition-colors"
-                >
-                  Contact
-                </a>
+                  onClick={e => {
+                    e.preventDefault();
+                    setIsContactModalOpen(true);
+                  }}
+                  className="text-gray-400 hover:text-white transition-colors">
+                  Contact Us
+                  </a>
               </li>
             </ul>
+
+            
           </div>
 
           {/* column 3 – contact info */}

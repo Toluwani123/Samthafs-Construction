@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import Home from './pages/Home'
 import Services from './pages/Services'
 import About from './pages/About'
+import ProjectDetails from './components/ProjectDetails'
 
 
 function App() {
@@ -14,8 +15,8 @@ function App() {
         <Route path="/" element={<Home/>} />
         <Route path="/about" element={<About/>} />
         <Route path="/services" element={<Services/>} />
-        <Route path="/login" element={<h1>Login</h1>} />
-        <Route path="/register" element={<h1>Register</h1>} />
+        <Route path="/projects/:id" element={<ProjectDetails />} />
+
         <Route path="*" element={<h1>Not FOund</h1>} />
       </Routes>
      
