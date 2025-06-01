@@ -1,6 +1,8 @@
 from django.contrib.auth.models import User
-from rest_framework import serializers
+from rest_framework import serializers, status
 from .models import *
+from rest_framework.response import Response
+
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -27,9 +29,13 @@ class PhaseSerializer(serializers.ModelSerializer):
         fields = ['title', 'description', 'order']
     
 class ProjectGallerySerializer(serializers.ModelSerializer):
+    image = serializers.ImageField(required=False, allow_null=True)
     class Meta:
         model = ProjectGallery
         fields = ['image', 'order']
+        extra_kwargs = {
+            'image': {'required': False, 'allow_null': True},
+        }
 class ChallengeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Challenge
@@ -37,14 +43,17 @@ class ChallengeSerializer(serializers.ModelSerializer):
 
     
     
+import json
+
 class ProjectSerializer(serializers.ModelSerializer):
     phases = PhaseSerializer(many=True, required=False)
     gallery = ProjectGallerySerializer(many=True, required=False)
     challenges = ChallengeSerializer(many=True, required=False)
+
     class Meta:
         model = Project
         fields = '__all__'
-    
+
     def create(self, validated_data):
         phases_data = validated_data.pop('phases', [])
         gallery_data = validated_data.pop('gallery', [])
@@ -61,31 +70,40 @@ class ProjectSerializer(serializers.ModelSerializer):
             Challenge.objects.create(project=project, **challenge_data)
         
         return project
+
     def update(self, instance, validated_data):
-        # Handle simple fields
+        print("VALIDATED DATA IN UPDATE:", validated_data)
+
+        # 1) Update all non-nested fields:
         for attr, value in validated_data.items():
             if attr not in ('phases', 'gallery', 'challenges'):
                 setattr(instance, attr, value)
         instance.save()
 
-        # Replace nested relationships if provided
+        # 2) Replace nested phases if provided
         if 'phases' in validated_data:
+            print("Updating phases:", validated_data['phases'])
             instance.phases.all().delete()
             for pd in validated_data['phases']:
                 Phase.objects.create(project=instance, **pd)
 
-        if 'gallery' in validated_data:
-            instance.gallery.all().delete()
-            for gd in validated_data['gallery']:
-                ProjectGallery.objects.create(project=instance, **gd)
-
+        # 3) Replace nested challenges if provided
         if 'challenges' in validated_data:
+            print("Updating challenges:", validated_data['challenges'])
             instance.challenges.all().delete()
             for cd in validated_data['challenges']:
                 Challenge.objects.create(project=instance, **cd)
 
+        # 4) Replace nested gallery if provided
+        if 'gallery' in validated_data:
+            print("Updating gallery:", validated_data['gallery'])
+            instance.gallery.all().delete()
+            for gd in validated_data['gallery']:
+                ProjectGallery.objects.create(project=instance, **gd)
+
         return instance
-    
+
+
 class TestimonialSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project

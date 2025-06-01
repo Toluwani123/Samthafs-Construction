@@ -113,21 +113,17 @@ function Footer({ setActivePage, setIsContactModalOpen }) {
 
           {/* column 4 – newsletter */}
           <div>
-            <h4 className="text-lg font-bold mb-6">Newsletter</h4>
-            <p className="text-gray-400 mb-4">
-              Subscribe to our newsletter for the latest updates and insights.
-            </p>
+            <h4 className="text-lg font-bold mb-6">Login (Site Admin)</h4>
+            
             <div className="flex">
-              <input
-                type="email"
-                placeholder="Your email address"
-                className="px-4 py-2 bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-l w-full text-sm"
-              />
-              <button className="!rounded-button whitespace-nowrap bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-r text-sm font-medium">
-                Subscribe
+              
+              <button className="!rounded-button whitespace-nowrap bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-r text-sm font-medium"
+                onClick={() => navigate('/login')}>
+                Login
               </button>
             </div>
           </div>
+          
         </div>
 
         {/* copyright */}

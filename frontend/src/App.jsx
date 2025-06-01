@@ -4,6 +4,9 @@ import Home from './pages/Home'
 import Services from './pages/Services'
 import About from './pages/About'
 import ProjectDetails from './components/ProjectDetails'
+import Login from './pages/Login'
+import Dashboard from './pages/Dashboard'
+import ProtectedRoute from './components/ProtectedRoute'
 
 
 function App() {
@@ -16,6 +19,16 @@ function App() {
         <Route path="/about" element={<About/>} />
         <Route path="/services" element={<Services/>} />
         <Route path="/projects/:id" element={<ProjectDetails />} />
+        <Route path="/login" element={<Login />} />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+
 
         <Route path="*" element={<h1>Not FOund</h1>} />
       </Routes>
