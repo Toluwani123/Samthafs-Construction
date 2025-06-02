@@ -68,42 +68,36 @@ class ProjectView(generics.ListCreateAPIView):
         # 3) Scan request.FILES for keys like "gallery[0][image]" → pull out those File objects.
         gallery_files = {}
         for key in request.FILES:
-            # We expect keys exactly of the form: "gallery[<index>][image]"
             if key.startswith('gallery[') and key.endswith('][image]'):
                 try:
                     idx = int(key.split('[')[1].split(']')[0])
                     gallery_files[idx] = request.FILES[key]
                     print(f"Found gallery file at index {idx} → {key}")
                 except (IndexError, ValueError):
-                    # If the key didn’t parse as an integer index, skip it.
                     pass
 
-        # 4) Inject each found File into mutable_data['gallery'][idx]['image'], if gallery exists
+        # 4) Attach those files into the parsed list
         if 'gallery' in mutable_data and isinstance(mutable_data['gallery'], list):
             for idx, file_obj in gallery_files.items():
                 if idx < len(mutable_data['gallery']):
-                    # Now that 'gallery' is a list of dicts, assign the file:
                     mutable_data['gallery'][idx]['image'] = file_obj
                     print(f"Attached File to gallery[{idx}]['image']")
 
-        # 5) Overwrite request._full_data so DRF’s serializer sees our flat dict:
+        # 5) Overwrite request._full_data so that DRF sees a plain dict
         request._full_data = mutable_data
         print("DATA BEING SENT TO SERIALIZER (create):", request._full_data)
 
-        # 6) Call DRF’s normal create() logic
+        # 6) Call DRF's normal create()
         response = super().create(request, *args, **kwargs)
 
-        # 7) Debug: once created, fetch the instance and print nested rows
+        # 7) (Optional) verify what got saved
         if response.status_code == status.HTTP_201_CREATED:
             new_id = response.data.get('id')
             try:
                 project = Project.objects.get(id=new_id)
-                print("After create → phases:",
-                      list(project.phases.values('title','description','order')))
-                print("After create → challenges:",
-                      list(project.challenges.values('title','description','solution')))
-                print("After create → gallery:",
-                      list(project.gallery.values('image','order')))
+                print("After create → phases:", list(project.phases.values('title','description','order')))
+                print("After create → challenges:", list(project.challenges.values('title','description','solution')))
+                print("After create → gallery:", list(project.gallery.values('image')))
             except Project.DoesNotExist:
                 pass
 
@@ -173,7 +167,7 @@ class ProjectEditView(generics.RetrieveUpdateDestroyAPIView):
         project = self.get_object()
         print("After update – phases:",     list(project.phases.values('title','description','order')))
         print("After update – challenges:", list(project.challenges.values('title','description','solution')))
-        print("After update – gallery:",    list(map(lambda g: {'image':g.image.name, 'order':g.order}, project.gallery.all())))
+        print("After update – gallery:",    list(map(lambda g: {'image':g.image.name}, project.gallery.all())))
 
         print("--- PROJECT UPDATE COMPLETE ---\n")
         return response

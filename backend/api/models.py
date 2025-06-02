@@ -65,7 +65,5 @@ class Phase(models.Model):
 class ProjectGallery(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='gallery')
     image = models.ImageField(upload_to='project_gallery/')
-    order = models.PositiveIntegerField(default=0)  # For sorting images
 
-    class Meta:
-        ordering = ['order']
+

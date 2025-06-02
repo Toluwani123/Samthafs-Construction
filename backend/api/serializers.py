@@ -32,7 +32,7 @@ class ProjectGallerySerializer(serializers.ModelSerializer):
     image = serializers.ImageField(required=False, allow_null=True)
     class Meta:
         model = ProjectGallery
-        fields = ['image', 'order']
+        fields = ['image']
         extra_kwargs = {
             'image': {'required': False, 'allow_null': True},
         }
@@ -97,10 +97,24 @@ class ProjectSerializer(serializers.ModelSerializer):
         # 4) Replace nested gallery if provided
         if 'gallery' in validated_data:
             print("Updating gallery:", validated_data['gallery'])
-            instance.gallery.all().delete()
-            for gd in validated_data['gallery']:
-                ProjectGallery.objects.create(project=instance, **gd)
 
+            # a) Pull out the existing image files in positional order
+            existing_images = [g.image for g in instance.gallery.all().order_by('id')]
+
+            # b) Delete everything (we’ll recreate below)
+            instance.gallery.all().delete()
+
+            # c) Now loop through the submitted list by index
+            for idx, gd in enumerate(validated_data['gallery']):
+                # If the front‐end did NOT attach a new 'image', re‐use the old one at the same index:
+                if not gd.get('image') and idx < len(existing_images):
+                    ProjectGallery.objects.create(
+                        project=instance,
+                        image=existing_images[idx]
+                    )
+                else:
+                    # Either a brand‐new File was provided, or no existing slot existed:
+                    ProjectGallery.objects.create(project=instance, **gd)
         return instance
 
 

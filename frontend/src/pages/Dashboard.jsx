@@ -44,7 +44,7 @@ export default function Dashboard() {
     { title: '', description: '', order:0},
   ]);
   const [galleryList, setGalleryList] = useState([
-    { image: null, order: 0 }, 
+    { image: null, existingImage: null },
   ]);
   const [challengesList, setChallengesList] = useState([
     { title: '', description: '', solution:""},   
@@ -194,7 +194,7 @@ export default function Dashboard() {
     setGalleryList(
         proj.gallery.map((g) => ({
             image: null, // reset to allow new upload
-            order: g.order,
+            existingImage: g.image, // keep existing image URL
         }))
     );
     setChallengesList(
@@ -252,8 +252,8 @@ export default function Dashboard() {
 
             // 4) Build a gallery‐payload that only contains “order” keys,
             //    because DRF’s update() will delete/create on that basis.
-            const galleryPayload = galleryList.map((g) => ({
-                order: g.order,
+            const galleryPayload = galleryList.map(_ => ({
+                
             // do NOT include `image` here—files come next under gallery[i][image]
             }));
             console.log('Gallery payload before stringify:', galleryPayload);
@@ -794,53 +794,54 @@ export default function Dashboard() {
 
                     {/* ─── NESTED: GALLERY ─── */}
                     <div className="mt-6">
-                    <h3 className="text-xl font-semibold mb-2">Gallery Images</h3>
-                    {galleryList.map((g, idx) => (
+                      <h3 className="text-xl font-semibold mb-2">Gallery Images</h3>
+
+                      {galleryList.map((g, idx) => (
                         <div key={idx} className="mb-4 border border-gray-200 p-4 rounded">
-                        <div className="flex justify-between">
+                          <div className="flex justify-between">
                             <span className="font-medium">Image #{idx + 1}</span>
                             <button
-                            type="button"
-                            onClick={() => removeGalleryImage(idx)}
-                            className="text-red-600 hover:text-red-800"
+                              type="button"
+                              onClick={() => removeGalleryImage(idx)}
+                              className="text-red-600 hover:text-red-800"
                             >
-                            <FaTimes />
+                              <FaTimes />
                             </button>
-                        </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
-                            <div>
+                          </div>
+
+                          {/*  Show existing preview if we have one  */}
+                          {g.existingImage && (
+                            <div className="mb-2">
+                              <img
+                                src={g.existingImage}
+                                alt={`Existing gallery ${idx + 1}`}
+                                className="w-32 h-20 object-cover rounded"
+                              />
+                            </div>
+                          )}
+
+                          <div className="mt-2">
                             <label className="block text-gray-700 text-sm">File</label>
                             <input
-                                type="file"
-                                accept="image/*"
-                                onChange={e =>
-                                updateGalleryImage(idx, e.target.files[0])
-                                }
-                                className="w-full"
+                              type="file"
+                              accept="image/*"
+                              onChange={e => updateGalleryImage(idx, e.target.files[0])}
+                              className="w-full"
                             />
-                            </div>
-                            <div>
-                            <label className="block text-gray-700 text-sm">Order</label>
-                            <input
-                                type="number"
-                                value={g.order}
-                                onChange={e =>
-                                updateGalleryOrder(idx, e.target.value)
-                                }
-                                className="w-full border border-gray-300 p-1 rounded"
-                            />
-                            </div>
+                          </div>
                         </div>
-                        </div>
-                    ))}
-                    <button
+                      ))}
+
+                      <button
                         type="button"
                         onClick={addGalleryImage}
                         className="flex items-center space-x-2 text-green-600 hover:text-green-800"
-                    >
+                      >
                         <FaPlus /> <span>Add Image</span>
-                    </button>
+                      </button>
                     </div>
+
+
 
                     {/* ─── NESTED: CHALLENGES ─── */}
                     <div className="mt-6">

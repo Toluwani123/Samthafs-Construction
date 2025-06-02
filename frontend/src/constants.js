@@ -3,6 +3,11 @@ import { FaBuilding, FaHome, FaIndustry, FaPaintRoller, FaTree } from 'react-ico
 export const ACCESS_TOKEN = 'access';
 export const REFRESH_TOKEN = 'refresh';
 export const API_URL = "http://localhost:8000/api";
+export const SERVICE_ID="service_xd1egdh";
+export const TEMPLATE_ID="template_m0tmrus";
+export const TEMPLATE_ID_QUOTE="template_errkqnc";
+export const PUBLIC_KEY="l6gMUG6c1V1VWbps1";
+
 
 export const services = [
     {

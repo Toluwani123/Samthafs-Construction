@@ -25,33 +25,36 @@ function About() {
         description: '',
     })
     const handleQuoteChange = e => {
-        setQuote({ ...quote, [e.target.name]: e.target.value })
-    }
-    const handleQuoteSubmit = async e => {
-        e.preventDefault()
-        try {
-        const { status } = await publicApi.post('/quote/', quote)
-        if (status === 201) {
-            setQuoteModalOpen(false)
-            setQuoteSent(true)
-            setQuote({ name:'', email:'', phone:'', projectType:'', location:'', budget:'', description:'' })
-        }
-        } catch (err) { console.error(err) }
-    }
+        const { name, value } = e.target;
+        setQuote(prev => ({ ...prev, [name]: value }));
+    };
+
+    
+    const handleQuoteSuccess = () => {
+        setQuoteSent(true);
+    };
+    const handleQuoteClose = () => {
+        setQuoteModalOpen(false);
+        setQuoteSent(false);
+        setQuote({
+        name: '', email: '', phone: '', projectType: '',
+        location: '', budget: '', description: ''
+        });
+    };
     const [messageSent, setMessageSent] = useState(false)
     const [contact, setContact] = useState({ name:'', email:'', phone:'', subject:'', message:'' })
     const handleContactChange = e => setContact({ ...contact, [e.target.name]: e.target.value })
-    const handleContactSubmit = async e => {
-        e.preventDefault()
-        try {
-        const { status } = await publicApi.post('/contact/', contact)
-        if (status === 201) {
-            setContactModalOpen(false)
-            setMessageSent(true)
-            setContact({ name:'', email:'', phone:'', subject:'', message:'' })
-        }
-        } catch (err) { console.error(err) }
-    }
+    const handleContactSuccess = () => {
+        setMessageSent(true);
+    };
+
+    // When the parent closes the modal, reset that “thank you” state:
+    const handleContactClose = () => {
+        setContactModalOpen(false);
+        setMessageSent(false);
+        setContact({ name: '', email: '', phone: '', subject: '', message: '' });
+    };
+        
     useEffect(() => {
             const onScroll = () => setScrolled(window.scrollY > 50);
             window.addEventListener('scroll', onScroll);
@@ -227,9 +230,9 @@ function About() {
                 <h2 className="text-4xl font-bold mb-6">Join Our Team</h2>
                 <p className="text-xl mb-8">We're always looking for talented professionals who share our passion for excellence in construction. Explore career opportunities with BuildMaster.</p>
                 <button
-                onClick={() => setContactModalOpen(true)}
-                className="!rounded-button whitespace-nowrap bg-white text-blue-600 hover:bg-blue-50 px-8 py-4 text-lg font-bold transition-colors inline-block cursor-pointer">
-                Contact Us About Careers
+                    onClick={() => setContactModalOpen(true)}
+                    className="!rounded-button whitespace-nowrap bg-white text-blue-600 hover:bg-blue-50 px-8 py-4 text-lg font-bold transition-colors inline-block cursor-pointer">
+                    Contact Us About Careers
                 </button>
             </div>
             </div>
@@ -244,20 +247,19 @@ function About() {
         />
         <ContactModal
             isOpen={contactModalOpen}
-            onClose={() => setContactModalOpen(false)}
+            onClose={handleContactClose}
             formData={contact}
             onChange={handleContactChange}
-            onSubmit={handleContactSubmit}
+            onSuccess={handleContactSuccess}
             isMessageSent={messageSent}
         />
         <QuoteModal
             isOpen={quoteModalOpen}
-            onClose={() => setQuoteModalOpen(false)}
-            formData={quote}              
-            onChange={handleQuoteChange}   
-            onSubmit={handleQuoteSubmit}   
-            isQuoteSent={quoteSent}  
-                
+            onClose={handleQuoteClose}
+            formData={quote}
+            onChange={handleQuoteChange}
+            onSuccess={handleQuoteSuccess}
+            isQuoteSent={quoteSent}
         />
         
         <ScrollToTop />

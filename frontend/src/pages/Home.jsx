@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, use} from 'react'
 import publicApi from '../api';
 import { FaChevronDown, FaMapMarkerAlt, FaClock, FaBuilding, FaHome, FaIndustry, FaPaintRoller, FaTree, FaCheckCircle, FaCalendarAlt, FaUsers, FaStar } from "react-icons/fa";
 import MenuBar from '../components/MenuBar';
@@ -22,6 +22,7 @@ function Home() {
     const [quoteSent, setQuoteSent] = useState(false);
     const [activePage, setActivePage] = useState("home");
     const [projects, setProjects] = useState([]);
+    const [homeData, setHomeData] = useState([]);
     const [quote, setQuote] = useState({
         name: "",
         email: "",
@@ -39,43 +40,41 @@ function Home() {
         message: "",
     });
 
-    const handleQuoteChange = (e) => {
-        setQuote({
-            ...quote,
-            [e.target.name]: e.target.value,
-        });
+    const handleQuoteChange = e => {
+        const { name, value } = e.target;
+        setQuote(prev => ({ ...prev, [name]: value }));
     };
+
     const handleContactChange = (e) => {
         setContact({
             ...contact,
             [e.target.name]: e.target.value,
         });
     };
-    const handleQuoteSubmit = async e => {
-        e.preventDefault();
-        try {
-        const { status } = await publicApi.post('/quote/', quote);
-        if (status === 201) {
-            setQuoteModal(false);
-            setQuoteSent(true);
-            setQuote({
-            name: '', email: '', phone: '',
-            projectType: '', location: '',
-            budget: '', description: '',
-            });
-        }
-        } catch (err) { console.error('Error sending quote:', err); }
+    const handleQuoteClose = () => {
+        setQuoteModal(false);
+        setQuoteSent(false);
+        setQuote({
+        name: '', email: '', phone: '', projectType: '',
+        location: '', budget: '', description: ''
+        });
     };
-    const handleContactSubmit = async e => {
-        e.preventDefault();
-        try {
-        const { status } = await publicApi.post('/contact/', contact);
-        if (status === 201) {
-            setContactModal(false);
-            setMessageSent(true);
-            setContact({ name: '', email: '', phone: '', subject: '', message: '' });
-        }
-        } catch (err) { console.error('Error sending contact message:', err); }
+    
+  // Called by QuoteModal when email‐JS returns success
+    const handleQuoteSuccess = () => {
+        setQuoteSent(true);
+    };
+
+      // Called by ContactModal when the user successfully sends
+    const handleContactSuccess = () => {
+        setMessageSent(true);
+    };
+
+    // When the parent closes the modal, reset that “thank you” state:
+    const handleContactClose = () => {
+        setContactModal(false);
+        setMessageSent(false);
+        setContact({ name: '', email: '', phone: '', subject: '', message: '' });
     };
     
     const stats = [
@@ -118,6 +117,20 @@ function Home() {
         };
         fetchProjects();
     }, []);
+
+    useEffect(() => {
+        const fetchHomeData = async () => {
+            try {
+                const response = await publicApi.get("/home/");
+                if (response.status === 200) {
+                    setHomeData(response.data); 
+                }
+            } catch (error) {   
+                console.error("Error fetching home data:", error);
+            }
+        };
+        fetchHomeData();
+    }, []);
     useEffect(() => {
         // when either modal is open, prevent the body from scrolling
         document.body.style.overflow = (contactModal || quoteModal) ? 'hidden' : 'auto';
@@ -137,26 +150,46 @@ function Home() {
             activePage={activePage}
         />
         <main>
-            <section id='home' className='relative h-screen flex items-center'>
-                <div className='absolute inset-0 overflow-hidden'>
-                    <img src="/images/home-bg.jpg" alt="Background" className='w-full h-full object-cover object-top' />
-                    <div className='absolute inset-0 bg-gradient-to-r from-blue-900/80 to-transparent'></div>
-                </div>
-                <div className='container mx-auto px-6 relative z-10'>
-                    <div className='max-w-2xl text-white'>
-                        <h1 className='text-5xl md:text-6xl font-bold mb-4'>Building Tomorrows Landmarks Today</h1>
-                        <p className='text-xl mb-8'>
-                            Excellence in construction is not just a goal; it's our commitment. We bring your vision to life with precision and care, ensuring every detail is perfect.
+                <section id="home" className="relative h-screen flex items-center">
+                    {/* Background image + gradient overlay */}
+                    <div className="absolute inset-0 overflow-hidden">
+                        <img
+                        src={homeData.background_image}
+                        alt="Background"
+                        className="w-full h-full object-cover object-center"
+                        />
+                        {/* Example gradient overlay to darken the left side */}
+                        <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent"></div>
+                    </div>
+
+                    {/* Text content */}
+                    <div className="container mx-auto px-6 relative z-10">
+                        <div className="max-w-2xl text-white">
+                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight">
+                            {homeData.main_text}
+                        </h1>
+                        <p className="text-base md:text-lg lg:text-xl mb-8">
+                            {homeData.sub_text}
                         </p>
-                        <button className='!rounded-button whitespace-nowrap bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 text-lg font-medium transition-colors cursor-pointer'>
+                        <button
+                            onClick={() => {
+                                setActivePage('projects');
+                                document
+                                .getElementById('projects')
+                                ?.scrollIntoView({ behavior: 'smooth' });
+                            }}
+                            className="rounded-lg bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 md:px-8 md:py-3 text-sm md:text-lg font-medium transition-colors"
+                        >
                             View Our Projects
                         </button>
+                        </div>
                     </div>
-                </div>
-                <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-white animate-bounce">
-                    <FaChevronDown />
-                </div>
-            </section>
+
+                    {/* Scroll‐down chevron */}
+                    <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white animate-bounce">
+                        <FaChevronDown className="w-6 h-6 md:w-8 md:h-8" />
+                    </div>
+                </section>
             <section id="projects" className="py-20 bg-gray-50">
                 <div className="container mx-auto px-6">
                     <div className="text-center mb-16">
@@ -307,18 +340,19 @@ function Home() {
             </section>
             <ContactModal
                 isOpen={contactModal}
-                onClose={() => setContactModal(false)}
+                onClose={handleContactClose}
                 formData={contact}
                 onChange={handleContactChange}
-                onSubmit={handleContactSubmit}
+                onSuccess={handleContactSuccess}
                 isMessageSent={messageSent}
             />
             <QuoteModal
                 isOpen={quoteModal}
-                onClose={() => setQuoteModal(false)}
+                onClose={handleQuoteClose}
                 formData={quote}
                 onChange={handleQuoteChange}
-                onSubmit={handleQuoteSubmit}
+                onSuccess={handleQuoteSuccess}
+                isQuoteSent={quoteSent}
             />
         </main>
         <Footer

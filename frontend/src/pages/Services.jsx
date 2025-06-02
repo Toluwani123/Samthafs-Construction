@@ -24,34 +24,39 @@ function Services() {
         budget: '',
         description: '',
     })
-    const handleQuoteChange = e => {
-        setQuote({ ...quote, [e.target.name]: e.target.value })
-    }
-    const handleQuoteSubmit = async e => {
-        e.preventDefault()
-        try {
-        const { status } = await publicApi.post('/quote/', quote)
-        if (status === 201) {
-            setQuoteModalOpen(false)
-            setQuoteSent(true)
-            setQuote({ name:'', email:'', phone:'', projectType:'', location:'', budget:'', description:'' })
-        }
-        } catch (err) { console.error(err) }
-    }
+    const handleQuoteChange = (e) => {
+        const { name, value } = e.target;
+        setQuote((prev) => ({ ...prev, [name]: value }));
+    };
+    const handleQuoteSuccess = () => {
+        setQuoteSent(true);
+    };
+    const handleQuoteClose = () => {
+        setQuoteModalOpen(false);
+        setQuoteSent(false);
+        setQuote({
+        name: '', email: '', phone: '', projectType: '',
+        location: '', budget: '', description: ''
+        });
+    };
+
+    
     const [messageSent, setMessageSent] = useState(false)
     const [contact, setContact] = useState({ name:'', email:'', phone:'', subject:'', message:'' })
     const handleContactChange = e => setContact({ ...contact, [e.target.name]: e.target.value })
-    const handleContactSubmit = async e => {
-        e.preventDefault()
-        try {
-        const { status } = await publicApi.post('/contact/', contact)
-        if (status === 201) {
-            setContactModalOpen(false)
-            setMessageSent(true)
-            setContact({ name:'', email:'', phone:'', subject:'', message:'' })
-        }
-        } catch (err) { console.error(err) }
-    }
+
+    // Called by ContactModal when the user successfully sends
+    const handleContactSuccess = () => {
+        setIsMessageSent(true);
+    };
+
+    // When the parent closes the modal, reset that “thank you” state:
+    const handleContactClose = () => {
+        setContactModalOpen(false);
+        setMessageSent(false);
+        setContact({ name: '', email: '', phone: '', subject: '', message: '' });
+    };
+    
 
     
 
@@ -275,20 +280,19 @@ function Services() {
 
         <ContactModal
             isOpen={contactModalOpen}
-            onClose={() => setContactModalOpen(false)}
+            onClose={handleContactClose}
             formData={contact}
             onChange={handleContactChange}
-            onSubmit={handleContactSubmit}
+            onSuccess={handleContactSuccess}
             isMessageSent={messageSent}
         />
         <QuoteModal
             isOpen={quoteModalOpen}
-            onClose={() => setQuoteModalOpen(false)}
-            formData={quote}              
-            onChange={handleQuoteChange}   
-            onSubmit={handleQuoteSubmit}   
-            isQuoteSent={quoteSent}  
-        
+            onClose={handleQuoteClose}
+            formData={quote}
+            onChange={handleQuoteChange}
+            onSuccess={handleQuoteSuccess}
+            isQuoteSent={quoteSent}
         />
 
         <ScrollToTop />
