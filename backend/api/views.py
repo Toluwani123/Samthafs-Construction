@@ -7,7 +7,7 @@ from .serializers import *
 import json
 # Create your views here.
 from .models import *
-from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 
 
 class CreateUserView(generics.CreateAPIView):
@@ -30,7 +30,7 @@ class ProjectView(generics.ListCreateAPIView):
     queryset = Project.objects.all().prefetch_related('phases', 'gallery', 'challenges')
     serializer_class = ProjectSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
-    parser_classes = [MultiPartParser, FormParser]
+    parser_classes = [MultiPartParser, FormParser, JSONParser]  
 
     def create(self, request, *args, **kwargs):
         print("\n--- STARTING PROJECT CREATE ---")
@@ -107,7 +107,7 @@ class ProjectEditView(generics.RetrieveUpdateDestroyAPIView):
     queryset         = Project.objects.all().prefetch_related('phases','gallery','challenges')
     serializer_class = ProjectSerializer
     permission_classes = [AllowAny]
-    parser_classes   = [MultiPartParser, FormParser]
+    parser_classes   = [MultiPartParser, FormParser, JSONParser]  
     lookup_field     = 'id'
 
     def update(self, request, *args, **kwargs):
@@ -183,6 +183,13 @@ class TeamMemberRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = TeamMemberSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
     lookup_field = 'id'
+    parser_classes = [MultiPartParser, FormParser]
+    def update(self, request, *args, **kwargs):
+        print("\n--- STARTING TEAM MEMBER UPDATE ---")
+        kwargs['partial'] = True
+        response = super().update(request, *args, **kwargs)
+        print("--- TEAM MEMBER UPDATE COMPLETE ---\n")
+        return response
 
 class TestimonialListView(generics.ListAPIView):
     serializer_class = TestimonialSerializer

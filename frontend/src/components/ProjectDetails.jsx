@@ -164,7 +164,23 @@ function ProjectDetails() {
                         <h2 className="text-3xl font-bold mb-6">Project Overview</h2>
                         <div className="prose prose-lg max-w-none mb-8">
                             {/* If you want to split paragraphs, you can .split('\n').map(...) */}
-                            <p>{project.overview}</p>
+                            {(()=>{
+                                const sentences = project.overview
+                                    ? project.overview.match(/[^.!?]+[.!?]*/g)
+                                    : [];
+                                const paragraphs = [];
+                                for (let i = 0; i<(sentences? sentences.length : 0); i+=2) {
+                                    paragraphs.push(
+                                        (sentences[i] || '') + (sentences[i + 1]? " " +sentences[i + 1] : '')
+                                    );
+                                }
+                                return paragraphs.map((paragraph, index) => (
+                                    <p key ={index} className="text-gray-700 mb-10">
+                                        {paragraph.trim()}                              
+                                    </p>
+                                ));
+
+                            })()}
                         </div>
                         </div>
 

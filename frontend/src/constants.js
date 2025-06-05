@@ -1,4 +1,9 @@
 import { FaBuilding, FaHome, FaIndustry, FaPaintRoller, FaTree } from 'react-icons/fa';
+import commercialimg from './assets/commercialimg.jpg';
+import servicesimg from './assets/servicesimg.png';
+import interiorimg from './assets/interiorimg.jpg';
+import exteriorimg from './assets/exteriorimg.png';
+import industrialimg from './assets/industrialimg.png';
 
 export const ACCESS_TOKEN = 'access';
 export const REFRESH_TOKEN = 'refresh';
@@ -21,6 +26,7 @@ export const services = [
             'Tenant fit-outs and remodels',
         ],
         id: 'commercial-construction',
+        image: servicesimg,
     },
     {
         Icon: FaHome,
@@ -33,6 +39,7 @@ export const services = [
         id: 'residential-development',
         desc:
         'Creating beautiful, sustainable homes and residential complexes that enhance quality of life and community values.',
+        image: commercialimg,
     },
     {
         Icon: FaIndustry,
@@ -45,6 +52,7 @@ export const services = [
         title: 'Industrial Construction',
         desc:
         'Specialized construction for manufacturing, logistics, and industrial facilities with a focus on efficiency and durability.',
+        image: industrialimg,
     },
     {
         Icon: FaPaintRoller,
@@ -57,6 +65,7 @@ export const services = [
         id: 'interior-works',
         desc:
         'From drywall and millwork to bespoke finishes and MEP fit-outs, we customize every interior space for style, comfort, and code compliance.',
+        image: interiorimg,
     },
     {
         Icon: FaTree,
@@ -69,5 +78,6 @@ export const services = [
         id: 'exterior-construction',
         desc:
         'Façade restoration, roofing, cladding, hardscapes, and landscaping—ensuring curb appeal, weather-resistance, and long-term performance.',
+        image: exteriorimg,
     },
 ];

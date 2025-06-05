@@ -7,6 +7,8 @@ import Footer from '../components/Footer';
 import QuoteModal from '../components/QuoteModal';
 import ContactModal from '../components/ContactModal';
 import ScrollToTop from '../components/ScrollToTop';
+import servicesimg from '../assets/servicesimg.png'; // Assuming you have a services image
+
 
 function Services() {
     const [testimonials, setTestimonials] = useState([]);
@@ -90,7 +92,7 @@ function Services() {
         <section className="relative pt-32 pb-20 bg-blue-900 text-white">
             <div className="absolute inset-0 opacity-20">
             <img
-                src="https://readdy.ai/api/search-image?query=construction%20workers%20on%20site%20with%20blueprints%2C%20professional%20team%20planning%20building%20project%2C%20architectural%20plans%2C%20diverse%20team%20of%20engineers%20and%20construction%20professionals%2C%20realistic%20construction%20photography%2C%20high%20resolution&width=1440&height=500&seq=21&orientation=landscape"
+                src={servicesimg}
                 alt="Construction services"
                 className="w-full h-full object-cover object-top"
             />
@@ -119,9 +121,9 @@ function Services() {
                     >
                     <div className="md:w-2/5 overflow-hidden">
                         <img 
-                        src={service.imageUrl} 
-                        alt={service.title}
-                        className="w-full h-full object-cover object-top"
+                            src={service.image}
+                            alt={service.title}
+                            className="w-full h-full object-cover object-top"
                         />
                     </div>
                     <div className="md:w-3/5 p-8">

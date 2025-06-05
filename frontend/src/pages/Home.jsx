@@ -316,7 +316,7 @@ function Home() {
                         Ready to Start Your Next Project?
                     </h2>
                     <p className="text-lg sm:text-xl mb-6 sm:mb-8 leading-relaxed">
-                        Partner with BuildMaster for exceptional construction services delivered on time and
+                        Partner with Samthafs for exceptional construction services delivered on time and
                         within budget. Our team of experts is ready to bring your vision to life.
                     </p>
                     <button

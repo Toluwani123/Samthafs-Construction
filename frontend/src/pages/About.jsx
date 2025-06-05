@@ -7,6 +7,9 @@ import ScrollToTop from '../components/ScrollToTop';
 import publicApi from '../api';
 import {GiStarMedal, GiLightBulb, GiTeamIdea} from 'react-icons/gi';
 import { FaHandshake } from "react-icons/fa";
+import aboutus from '../assets/aboutus.png';
+import bckimgabout from '../assets/bckimgabout.jpg';
+import ourapproach from '../assets/ourapproach.jpg';
 
 function About() {
     const [teamMembers, setTeamMembers] = useState([]);
@@ -83,8 +86,8 @@ function About() {
         <section className="relative pt-32 pb-20 bg-blue-900 text-white">
             <div className="absolute inset-0 opacity-20">
             <img
-                src="https://readdy.ai/api/search-image?query=professional%20construction%20team%20meeting%20at%20office%2C%20diverse%20group%20of%20architects%20and%20engineers%20discussing%20blueprints%2C%20modern%20architectural%20office%2C%20teamwork%20in%20construction%20industry%2C%20realistic%20photography%2C%20high%20resolution&width=1440&height=500&seq=22&orientation=landscape"
-                alt="About BuildMaster"
+                src={bckimgabout}
+                alt="About Samthafs"
                 className="w-full h-full object-cover object-top"
             />
             </div>
@@ -100,7 +103,7 @@ function About() {
             <div className="flex flex-col lg:flex-row gap-12 items-center">
                 <div className="lg:w-1/2">
                 <img 
-                    src="https://readdy.ai/api/search-image?query=construction%20company%20founder%20in%20hard%20hat%20at%20construction%20site%2C%20professional%20businessman%20reviewing%20plans%20with%20team%2C%20modern%20building%20project%20in%20background%2C%20leadership%20in%20construction%20industry%2C%20realistic%20photography%2C%20high%20resolution&width=700&height=500&seq=23&orientation=landscape" 
+                    src={aboutus} 
                     alt="Our Story" 
                     className="rounded-lg shadow-xl w-full h-auto"
                 />
@@ -108,13 +111,13 @@ function About() {
                 <div className="lg:w-1/2">
                 <h2 className="text-4xl font-bold mb-6">Our Story</h2>
                 <p className="text-lg text-gray-600 mb-6">
-                    Founded in 2005 by Michael Reynolds, BuildMaster began with a vision to create a construction company that would set new standards for quality, innovation, and client satisfaction in the industry.
+                    Founded in 2005 by Samson Oluwole, Samthafs began with a vision to create a construction company that would set new standards for quality, innovation, and client satisfaction in the industry.
                 </p>
                 <p className="text-lg text-gray-600 mb-6">
                     Starting with a small team of dedicated professionals, we quickly established a reputation for excellence in the commercial construction sector. As our portfolio grew, so did our capabilities, expanding into residential and industrial construction.
                 </p>
                 <p className="text-lg text-gray-600">
-                    Today, with over 150 team members and more than 250 successful projects completed, BuildMaster stands as a leader in the construction industry, known for our unwavering commitment to quality, innovative solutions, and client-focused approach.
+                    Today, with over 150 team members and more than 250 successful projects completed, Samthafs stands as a leader in the construction industry, known for our unwavering commitment to quality, innovative solutions, and client-focused approach.
                 </p>
                 </div>
             </div>
@@ -205,7 +208,7 @@ function About() {
                 <div className="lg:w-1/2">
                 <h2 className="text-4xl font-bold mb-6">Our Approach</h2>
                 <p className="text-lg text-gray-600 mb-6">
-                    At BuildMaster, we believe that successful construction projects begin with a deep understanding of our clients' vision and objectives. Our client-centered approach ensures that every project we undertake is tailored to meet specific needs and expectations.
+                    At Samthafs, we believe that successful construction projects begin with a deep understanding of our clients' vision and objectives. Our client-centered approach ensures that every project we undertake is tailored to meet specific needs and expectations.
                 </p>
                 <p className="text-lg text-gray-600 mb-6">
                     We combine technical expertise with creative problem-solving to overcome challenges and deliver innovative solutions. Our integrated team of architects, engineers, and construction professionals works collaboratively throughout the project lifecycle.
@@ -216,7 +219,7 @@ function About() {
                 </div>
                 <div className="lg:w-1/2">
                 <img 
-                    src="https://readdy.ai/api/search-image?query=construction%20team%20reviewing%20architectural%20plans%20on%20site%2C%20diverse%20group%20of%20professionals%20in%20hard%20hats%2C%20modern%20building%20project%2C%20teamwork%20in%20construction%20industry%2C%20realistic%20photography%2C%20high%20resolution&width=700&height=500&seq=24&orientation=landscape" 
+                    src={ourapproach}
                     alt="Our Approach" 
                     className="rounded-lg shadow-xl w-full h-auto"
                 />
@@ -228,7 +231,7 @@ function About() {
             <div className="container mx-auto px-6">
             <div className="max-w-3xl mx-auto text-center">
                 <h2 className="text-4xl font-bold mb-6">Join Our Team</h2>
-                <p className="text-xl mb-8">We're always looking for talented professionals who share our passion for excellence in construction. Explore career opportunities with BuildMaster.</p>
+                <p className="text-xl mb-8">We're always looking for talented professionals who share our passion for excellence in construction. Explore career opportunities with Samthafs.</p>
                 <button
                     onClick={() => setContactModalOpen(true)}
                     className="!rounded-button whitespace-nowrap bg-white text-blue-600 hover:bg-blue-50 px-8 py-4 text-lg font-bold transition-colors inline-block cursor-pointer">
